@@ -3,7 +3,7 @@
 -- On démarre une transaction afin de s'assurer de la cohérence gloabale de la BDD
 BEGIN;
 
--- D'abord on supprime les table 'si elle existe"
+-- D'abord on supprime les tables 'si elles existent"
 DROP TABLE IF EXISTS "customer", "seller", "product", "order", "image", "category", "order_has_product";
 
 
@@ -106,7 +106,6 @@ CREATE TABLE "order_has_product" (
   "product_id" INTEGER NOT NULL REFERENCES product("id"),
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
   -- ici pas d'updated_at car une relation ne se met pas à jour, soit on l'ajoute soit on la supprime
 
 

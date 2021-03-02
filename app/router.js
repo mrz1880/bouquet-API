@@ -11,7 +11,7 @@ const sellerController = require('./controllers/sellerController');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.send('hello');
+  res.send('HomePage');
 });
 
 /** Products */
@@ -25,30 +25,23 @@ router.get('/customer/:id', customerController.getOneCustomer);
 
 
 /* Orders */
+router.get('order/:id', orderController.getOneOrder);
 router.get('/seller/:id/orders', orderController.getSellerOrders);
+router.get('/customer/:id/orders', orderController.getCustomerOrders);
 
 
 
 /* Categories */
-router.get('/tags', tagController.getAllTags);
-router.post('/tags', tagController.createTag);
-router.patch('/tags/:id', tagController.modifyTag);
-router.put('/tags/:id?', tagController.createOrModify);
-router.delete('/tags/:id', tagController.deleteTag);
-router.post('/seller/:id/orders', tagController.associateTagToCard);
-router.delete('/cards/:cardId/tags/:tagId', tagController.removeTagFromCard);
+router.get('/categories', categoryController.getAllCategories);
+
 
 /* Sellers */
-router.get('/tags', tagController.getAllTags);
-router.post('/tags', tagController.createTag);
-router.patch('/tags/:id', tagController.modifyTag);
-router.put('/tags/:id?', tagController.createOrModify);
-router.delete('/tags/:id', tagController.deleteTag);
-router.post('/cards/:id/tags', tagController.associateTagToCard);
-router.delete('/cards/:cardId/tags/:tagId', tagController.removeTagFromCard);
+router.get('/sellers', sellerController.getAllSellers);
+router.get('/sellers/:id', sellerController.getOneSeller);
+
 
 router.use((req, res) => {
-  res.status(404).send('Service does not exists\nSee : https://doc.localhost.api');
+  res.status(404).send('Page 404');
 });
 
 module.exports = router;
