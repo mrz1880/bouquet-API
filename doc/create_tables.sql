@@ -4,7 +4,7 @@
 BEGIN;
 
 -- D'abord on supprime les table 'si elle existe"
-DROP TABLE IF EXISTS "customer", "seller", "product", "purchase", "image", "category", "purchase_has_product";
+DROP TABLE IF EXISTS "customer", "seller", "product", "order", "image", "category", "order_has_product";
 
 
 -- après le DROP, aucune chance que les tables existent
@@ -78,7 +78,7 @@ CREATE TABLE "product" (
 );
 
 
-CREATE TABLE "purchase" (
+CREATE TABLE "order" (
   "id" SERIAL PRIMARY KEY,
   "reference" TEXT NOT NULL,
   "total_amount" FLOAT(5) NOT NULL, 
@@ -97,11 +97,11 @@ CREATE TABLE "image" (
   "updated_at" TIMESTAMPTZ
 );
 
-CREATE TABLE "purchase_has_product" (
+CREATE TABLE "order_has_product" (
   "id" SERIAL PRIMARY KEY,
   "quantity" INTEGER NOT NULL,
   "price_per_unit" FLOAT(5) NOT NULL,
-  "purchase_id" INTEGER NOT NULL REFERENCES purchase("id"),
+  "order_id" INTEGER NOT NULL REFERENCES "order"("id"),
   "product_id" INTEGER NOT NULL REFERENCES product("id"),
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -148,7 +148,7 @@ VALUES ('00211', 'Roses rouges', 'Un bouquet de roses rouges pour les déclarati
        ('00223', 'La félicité', 'Les roses jaunes expriment la joie grâce à leur couleur gaie, idéales pour les anniversaires ou pour les joyeuses occasions', 19, 32.75, 1, 5 );
        
 
-INSERT INTO "purchase" ("reference", "total_amount", "status", "customer_id" )
+INSERT INTO "order" ("reference", "total_amount", "status", "customer_id" )
 VALUES ('21001', 56.14, 'En préparation avant livraison', 1 ), -- id 1
        ('21002', 73.99, 'En livraison', 1 ),
        ('21003', 36.90, 'Livrée', 3 ),
@@ -207,7 +207,7 @@ VALUES ('https://cdn.pixabay.com/photo/2017/08/07/19/38/red-2607058__340.jpg', 1
 
 
 
-INSERT INTO "purchase_has_product" ("purchase_id", "product_id", "quantity", "price_per_unit")
+INSERT INTO "order_has_product" ("order_id", "product_id", "quantity", "price_per_unit")
 VALUES (1, 1, 2, 24.00),
        (1, 2, 1, 16.15),
        (1, 3, 3, 15.99),
