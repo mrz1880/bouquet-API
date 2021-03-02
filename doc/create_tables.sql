@@ -102,6 +102,7 @@ CREATE TABLE "order_has_product" (
   "quantity" INTEGER NOT NULL,
   "price_per_unit" FLOAT(5) NOT NULL,
   "order_id" INTEGER NOT NULL REFERENCES "order"("id"),
+  --ici il faut mettre order entre guillemets sinon ça fait une erreur car order est réservé
   "product_id" INTEGER NOT NULL REFERENCES product("id"),
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
