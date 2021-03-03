@@ -18,6 +18,7 @@ Seller.init({
   siret: DataTypes.TEXT,
   shop_name: DataTypes.TEXT,
   shop_presentation: DataTypes.STRING(600),
+
 },{
   sequelize,
   tableName: "seller"

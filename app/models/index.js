@@ -24,7 +24,7 @@ Seller.hasMany(Product, {
 
 // réciproque : un product est lié à un seul seller
 Product.belongsTo(Seller, {
-    foreignKey: "product_id",
+    foreignKey: "seller_id",
     as: "seller"
 });
 
@@ -36,7 +36,7 @@ Product.hasMany(Image, {
 
 // réciproque : une image est liée à un seul product
 Image.belongsTo(Product, {
-    foreignKey: "image_id",
+    foreignKey: "product_id",
     as: "product"
 });
 
@@ -48,6 +48,7 @@ Product.belongsToMany(Order, {
     through: 'order_has_product', // "via la table de liaison qui s'appelle ..."
     foreignKey: 'product_id', // le nom de la clef de Product dans la table de liaison
     otherKey: 'order_id', // le nom de la clef de "l'autre" (donc Order)
+    timestamps: false // il n'y a pas de updated-at dans la table de liaison
 });
 
 // et la réciproque..
@@ -56,7 +57,5 @@ Order.belongsToMany(Product, {
     through: 'order_has_product',
     foreignKey: 'order_id',
     otherKey: 'product_id',
+    timestamps: false // il n'y a pas de updated-at dans la table de liaison
 });
-
-
-module.exports = { Customer, Image, Order, Product, Seller };

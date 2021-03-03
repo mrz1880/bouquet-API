@@ -16,18 +16,19 @@ router.get('/', (req, res) => {
 
 /** Products */
 router.get('/products', productController.getAllProducts);
-router.get('/products/:id', productController.getOneProduct);
-router.get('/seller/:id/products', productController.GetProductsFromSeller);
+router.get('/product/:id', productController.getOneProduct);
+//router.get('/seller/:id/products', productController.getProductsFromSeller);
 
 
 /* Customers */
-router.get('/customer/:id', customerController.getOneCustomer);
-
+//router.get('/customer/:id', customerController.getOneCustomer);
+router.post('/customer/login', customerController.customerHandleLoginForm); 
 
 /* Orders */
-router.get('order/:id', orderController.getOneOrder);
-router.get('/seller/:id/orders', orderController.getSellerOrders);
-router.get('/customer/:id/orders', orderController.getCustomerOrders);
+router.get('/order/:id', orderController.getOneOrder);
+
+router.get('/seller/:id/orders', orderController.getSellerOrders); // todo
+router.get('/customer/:id/orders', orderController.getCustomerOrders); // todo
 
 
 
@@ -37,7 +38,12 @@ router.get('/categories', categoryController.getAllCategories);
 
 /* Sellers */
 router.get('/sellers', sellerController.getAllSellers);
-router.get('/sellers/:id', sellerController.getOneSeller);
+
+router.post('/seller/login', sellerController.sellerHandleLoginForm); // LOGIN
+
+router.post('/seller/signup', sellerController.sellerHandleSignupForm); // SIGNUP
+
+router.get('/seller/:id', sellerController.getOneSeller);
 
 
 router.use((req, res) => {

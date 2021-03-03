@@ -8,7 +8,7 @@ Product.init({
   name: DataTypes.TEXT,
   description: DataTypes.STRING(600),
   stock: DataTypes.INTEGER,
-  price: DataTypes.FLOAT(5,2),
+  price: DataTypes.TEXT,
 }, {
   sequelize,
   tableName: "product"

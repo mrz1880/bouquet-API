@@ -1,11 +1,10 @@
 const dotenv = require('dotenv');
 dotenv.config();
-const multer = require('multer');
+const multer = require('multer'); // pour pouvoir recevoir des données dans le serveur API à partir d'un utilisateur extérieur
 const upload = multer();
 const express = require('express');
 const router = require('./app/router');
-// Je require le middleware pour dire à express
-// d'être plus permissif sur l'origine des requêtes
+
 const cors = require('cors');
 
 const PORT = process.env.PORT || 5050;

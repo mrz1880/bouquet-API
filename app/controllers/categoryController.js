@@ -4,14 +4,8 @@ const categoryController = {
     getAllCategories: async (req, res) => {
     try {
       const categories = await Category.findAll({
-        //à faire
-        include: {
-          association: 'cards',
-          include: 'tags',
-        },
         order: [
-          ['position', 'ASC'],
-          ['cards', 'position', 'ASC'],
+          ['label', 'ASC'],
         ],
       });
       res.json(categories);

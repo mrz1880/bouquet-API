@@ -1,17 +1,11 @@
-const { Customer, Seller, Order } = require('../models');
+const Order = require('../models/order');
 
 const orderController = {
   getOneOrder: async (req, res) => {
     try {
+      console.log('getOneOrder')
       const orderId = req.params.id;
-      const order = await Order.findByPk(orderId, {
-          // coder ce includer
-        include: {
-          association: 'cards',
-          include: 'tags',
-        },
-        order: [['cards', 'position', 'ASC']],
-      });
+      const order = await Order.findByPk(orderId);
       if (order) {
         res.json(order);
       } else {

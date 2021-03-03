@@ -46,7 +46,7 @@ CREATE TABLE "seller" (
   "street_name" TEXT NOT NULL,
   "street_number" VARCHAR(5),
   "city" TEXT NOT NULL,
-  "zipcode" VARCHAR(5),
+  "zipcode" CHAR(5),
   "picture_url" TEXT NOT NULL,
   "siret" CHAR(14),
   "shop_name" TEXT NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE "product" (
   "name" TEXT NOT NULL,
   "description" VARCHAR(600) NOT NULL,
   "stock" INTEGER NOT NULL,
-  "price" FLOAT(5) NOT NULL,
+  "price" TEXT NOT NULL,
   "seller_id" INTEGER NOT NULL REFERENCES seller("id"),
   "category_id" INTEGER NOT NULL REFERENCES category("id"),
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -81,7 +81,7 @@ CREATE TABLE "product" (
 CREATE TABLE "order" (
   "id" SERIAL PRIMARY KEY,
   "reference" TEXT NOT NULL,
-  "total_amount" FLOAT(5) NOT NULL, 
+  "total_amount" TEXT NOT NULL, 
   "status" TEXT NOT NULL,
   "customer_id" INTEGER NOT NULL REFERENCES customer("id"),
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -100,7 +100,7 @@ CREATE TABLE "image" (
 CREATE TABLE "order_has_product" (
   "id" SERIAL PRIMARY KEY,
   "quantity" INTEGER NOT NULL,
-  "price_per_unit" FLOAT(5) NOT NULL,
+  "price_per_unit" TEXT NOT NULL,
   "order_id" INTEGER NOT NULL REFERENCES "order"("id"),
   --ici il faut mettre order entre guillemets sinon ça fait une erreur car order est réservé
   "product_id" INTEGER NOT NULL REFERENCES product("id"),
@@ -112,15 +112,15 @@ CREATE TABLE "order_has_product" (
 
 
 INSERT INTO "customer" ("gender", "firstname", "lastname", "email", "password", "phone_number", "street_name", "street_number", "city", "zipcode")
-VALUES ('male', 'Jean', 'DelaFontaine', 'jean@gmail.com', 'jeandelafontaine', '0712344556', 'Cessole', '23', 'Paris', '75000' ),
-       ('male', 'Leonard', 'Devinci', 'davinci@gmail.com', 'davincode', '0761861314', 'Laguet', '11', 'Bordeaux', '33000' ),
-       ('female', 'Clara', 'Watson', 'watson@gmail.com', 'grandgalop', '0661673140', 'Fanny', '2', 'Poitiers', '86000' );
+VALUES ('M', 'Jean', 'DelaFontaine', 'jean@gmail.com', 'jeandelafontaine', '0712344556', 'Cessole', '23', 'Paris', '75000' ),
+       ('M', 'Leonard', 'Devinci', 'davinci@gmail.com', 'davincode', '0761861314', 'Laguet', '11', 'Bordeaux', '33000' ),
+       ('F', 'Clara', 'Watson', 'watson@gmail.com', 'grandgalop', '0661673140', 'Fanny', '2', 'Poitiers', '86000' );
 
 
 INSERT INTO "seller" ("gender", "firstname", "lastname", "email", "password", "phone_number", "street_name", "street_number", "city", "zipcode", "picture_url", "siret", "shop_name", "shop_presentation")
-VALUES ('male', 'Edmond', 'Dantes', 'dantes@gmail.com', 'lepharaon14', '0712344556', 'Cessole', '23', 'Marseille', '13000', 'https://images.freeimages.com/images/small-previews/782/flowers-1363348.jpg', '12345678901234', 'TerraSura', 'Voici mon humble petite boutique de fleurs, je vends principalement des fleurs d''été.' ),
-       ('male', 'Albert', 'de Morcerf', 'morcerf@gmail.com', 'venise-italie', '0761861314', 'Laguet', '11', 'Bordeaux', '33000', 'https://images.freeimages.com/images/small-previews/a53/flowers-1541944.jpg', '12345678901234', 'AgricA', 'Bonjour moi c''est Albert, j''aime les fleurs et les sculptures' ),
-       ('female', 'Mercedes', 'Herrera', 'mercedes@gmail.com', 'grandgalop', '0661673140', 'Fanny', '2', 'Poitiers', '86000', 'https://images.freeimages.com/images/small-previews/0dd/flowers-1394193.jpg', '12345678901234', 'MercedesFlowers', 'Je m''appelle Mercedes et je fais de l''horticulture' );
+VALUES ('M', 'Edmond', 'Dantes', 'dantes@gmail.com', 'lepharaon14', '0712344556', 'Cessole', '23', 'Marseille', '13000', 'https://images.freeimages.com/images/small-previews/782/flowers-1363348.jpg', '12345678901234', 'TerraSura', 'Voici mon humble petite boutique de fleurs, je vends principalement des fleurs d''été.' ),
+       ('M', 'Albert', 'de Morcerf', 'morcerf@gmail.com', 'venise-italie', '0761861314', 'Laguet', '11', 'Bordeaux', '33000', 'https://images.freeimages.com/images/small-previews/a53/flowers-1541944.jpg', '12345678901234', 'AgricA', 'Bonjour moi c''est Albert, j''aime les fleurs et les sculptures' ),
+       ('F', 'Mercedes', 'Herrera', 'mercedes@gmail.com', 'grandgalop', '0661673140', 'Fanny', '2', 'Poitiers', '86000', 'https://images.freeimages.com/images/small-previews/0dd/flowers-1394193.jpg', '12345678901234', 'MercedesFlowers', 'Je m''appelle Mercedes et je fais de l''horticulture' );
 
 
 INSERT INTO "category" ("label")
@@ -133,30 +133,30 @@ VALUES ('Mariage'),
 
 
 INSERT INTO "product" ("reference", "name", "description", "stock", "price", "seller_id", "category_id" ) 
-VALUES ('00211', 'Roses rouges', 'Un bouquet de roses rouges pour les déclarations les plus passionnées.', 19, 24.00, 1, 4 ), -- id 1
-       ('00212', 'Tulipes', 'Les tulipes sont des plantes à bulbes appartenant à la grande famille des Liliacées. Le genre Tulipa comprend une centaine d’espèces distribuées en Europe, de l’Asie occidentale à l’Asie centrale et en Afrique du Nord. Ce genre est représenté aussi par des milliers de cultivars et hybrides, sélectionnés depuis qu’elles ont été introduites en Occident par Charles de l’Écluse au 16e siècle.', 3, 16.15, 2, 1 ), -- id 2
-       ('00213', 'La délicate', 'Fleur symbolique du 1er mai, le muguet séduit par ses délicates clochettes blanches. Cette fleur de la famille des Liliacées se trouve communément dans tout l''hémisphère nord. Plusieurs variétés ont été mises au point à partir de l''espèce : ''Albostriata'', ''Flore Pleno'', etc.', 31, 15.99, 3, 2 ),
-       ('00214', 'Lis', 'Le lys est une plante (liliacée) bulbeuse ornementale des régions tempérées, à grandes fleurs blanches souvent très odorantes. (De nombreux hybrides sont cultivés.) Fleur du lis blanc ; symbole littéraire de la pureté, de la virginité.', 13, 19.99, 1, 3 ),
-       ('00215', 'Bégonia', 'Originaire d''Amérique du sud, le bégonia a été découvert au XVIIe siècle lors d''une expédition menée par Michel Bégon, le gouverneur de Saint-Domingue. Aujourd''hui, cette jolie plante orne aussi bien le jardin que nos intérieurs.', 9, 49.99, 2, 4 ),
-       ('00216', 'Violettes', 'Viola est un genre de plantes herbacées vivaces de la famille des Violaceae. Selon le positionnement des pétales, les espèces sont appelées « violettes » ou « pensées ». Les violettes sont parfois appelées « herbes de la Trinité ». Ces plantes ont un usage principalement ornemental.', 12, 42.99, 3, 5 ),
-       ('00217', 'Chrysanthèmes', 'Fleur d''automne, le chrysanthème est majoritairement utilisé pour fleurir les cimetières à la Toussaint. Dans les pays dont il est originaire comme le Japon, il revêt au contraire une symbolique positive et représente la joie et le bonheur. Il est même devenu le symbole de la Chine.', 7, 29.99, 1, 2 ),
-       ('00224', 'Le printemps', 'Les tulipes sont des plantes à bulbes appartenant à la grande famille des Liliacées. Le genre Tulipa comprend une centaine d’espèces distribuées en Europe, de l’Asie occidentale à l’Asie centrale et en Afrique du Nord. Ce genre est représenté aussi par des milliers de cultivars et hybrides, sélectionnés depuis qu’elles ont été introduites en Occident par Charles de l’Écluse au 16e siècle.', 3, 17.99, 1, 1 ),
-       ('00219', 'Anthémis', 'Originaire des Iles Canaries, l''anthémis appartient à la famille des Astéracées. Il se reconnaît à ses petites fleurs aux allures de marguerite de couleurs blanche, jaune, rose ou rouge selon les variétés.', 3, 37.20, 3, 2 ),
-       ('00220', 'Camomille', 'Très odorante, la camomille romaine (Chamaemelum nobile), appelée aussi camomille noble ou officinale, fait partie des classiques en herboristerie. Originaire d''Europe du Sud et cultivée depuis l''Antiquité, cette plante rampante rustique à fleurs simples donne de jolis pétales blancs et un cœur jaune, les capitules, pareils à des marguerites.', 112, 42.99, 1, 3 ),
+VALUES ('00211', 'Roses rouges', 'Un bouquet de roses rouges pour les déclarations les plus passionnées.', 19, '24.00', 1, 4 ), -- id 1
+       ('00212', 'Tulipes', 'Les tulipes sont des plantes à bulbes appartenant à la grande famille des Liliacées. Le genre Tulipa comprend une centaine d’espèces distribuées en Europe, de l’Asie occidentale à l’Asie centrale et en Afrique du Nord. Ce genre est représenté aussi par des milliers de cultivars et hybrides, sélectionnés depuis qu’elles ont été introduites en Occident par Charles de l’Écluse au 16e siècle.', 3, '16.15', 2, 1 ), -- id 2
+       ('00213', 'La délicate', 'Fleur symbolique du 1er mai, le muguet séduit par ses délicates clochettes blanches. Cette fleur de la famille des Liliacées se trouve communément dans tout l''hémisphère nord. Plusieurs variétés ont été mises au point à partir de l''espèce : ''Albostriata'', ''Flore Pleno'', etc.', 31, '15.99', 3, 2 ),
+       ('00214', 'Lis', 'Le lys est une plante (liliacée) bulbeuse ornementale des régions tempérées, à grandes fleurs blanches souvent très odorantes. (De nombreux hybrides sont cultivés.) Fleur du lis blanc ; symbole littéraire de la pureté, de la virginité.', 13, '19.99', 1, 3 ),
+       ('00215', 'Bégonia', 'Originaire d''Amérique du sud, le bégonia a été découvert au XVIIe siècle lors d''une expédition menée par Michel Bégon, le gouverneur de Saint-Domingue. Aujourd''hui, cette jolie plante orne aussi bien le jardin que nos intérieurs.', 9, '49.99', 2, 4 ),
+       ('00216', 'Violettes', 'Viola est un genre de plantes herbacées vivaces de la famille des Violaceae. Selon le positionnement des pétales, les espèces sont appelées « violettes » ou « pensées ». Les violettes sont parfois appelées « herbes de la Trinité ». Ces plantes ont un usage principalement ornemental.', 12, '42.99', 3, 5 ),
+       ('00217', 'Chrysanthèmes', 'Fleur d''automne, le chrysanthème est majoritairement utilisé pour fleurir les cimetières à la Toussaint. Dans les pays dont il est originaire comme le Japon, il revêt au contraire une symbolique positive et représente la joie et le bonheur. Il est même devenu le symbole de la Chine.', 7, '29.99', 1, 2 ),
+       ('00224', 'Le printemps', 'Les tulipes sont des plantes à bulbes appartenant à la grande famille des Liliacées. Le genre Tulipa comprend une centaine d’espèces distribuées en Europe, de l’Asie occidentale à l’Asie centrale et en Afrique du Nord. Ce genre est représenté aussi par des milliers de cultivars et hybrides, sélectionnés depuis qu’elles ont été introduites en Occident par Charles de l’Écluse au 16e siècle.', 3, '17.99', 1, 1 ),
+       ('00219', 'Anthémis', 'Originaire des Iles Canaries, l''anthémis appartient à la famille des Astéracées. Il se reconnaît à ses petites fleurs aux allures de marguerite de couleurs blanche, jaune, rose ou rouge selon les variétés.', 3, '37.20', 3, 2 ),
+       ('00220', 'Camomille', 'Très odorante, la camomille romaine (Chamaemelum nobile), appelée aussi camomille noble ou officinale, fait partie des classiques en herboristerie. Originaire d''Europe du Sud et cultivée depuis l''Antiquité, cette plante rampante rustique à fleurs simples donne de jolis pétales blancs et un cœur jaune, les capitules, pareils à des marguerites.', 112, '42.99', 1, 3 ),
        ('00221', 'Romance', 'Pour les déclarations romantiques, les roses roses sont les plus appropriées. Le rose symbolise la féminité, le raffinement et la tendresse.', 19, 24, 1, 4 ),
-       ('00222', 'Roses blanches', 'Les roses blanches, aussi appelées roses nuptiales, expriment l’humilité et le respect, parfaites pour les mariages', 19, 36.90, 1, 1 ),
-       ('00223', 'La félicité', 'Les roses jaunes expriment la joie grâce à leur couleur gaie, idéales pour les anniversaires ou pour les joyeuses occasions', 19, 32.75, 1, 5 );
+       ('00222', 'Roses blanches', 'Les roses blanches, aussi appelées roses nuptiales, expriment l’humilité et le respect, parfaites pour les mariages', 19, '36.90', 1, 1 ),
+       ('00223', 'La félicité', 'Les roses jaunes expriment la joie grâce à leur couleur gaie, idéales pour les anniversaires ou pour les joyeuses occasions', 19, '32.75', 1, 5 );
        
 
 INSERT INTO "order" ("reference", "total_amount", "status", "customer_id" )
-VALUES ('21001', 56.14, 'En préparation avant livraison', 1 ), -- id 1
-       ('21002', 73.99, 'En livraison', 1 ),
-       ('21003', 36.90, 'Livrée', 3 ),
-       ('21004', 49.99, 'Livrée', 2 ),
-       ('21005', 24.00, 'Livrée', 1 ),
-       ('21006', 36.90, 'Livrée', 1 );
+VALUES ('21001', '56.14', 'En préparation avant livraison', 1 ), -- id 1
+       ('21002', '73.99', 'En livraison', 1 ),
+       ('21003', '36.90', 'Livrée', 3 ),
+       ('21004', '49.99', 'Livrée', 2 ),
+       ('21005', '24.00', 'Livrée', 1 ),
+       ('21006', '36.90', 'Livrée', 1 );
 
--- A FINIR LES TOTAL_AMOUNT
+
 
 
 
@@ -208,15 +208,15 @@ VALUES ('https://cdn.pixabay.com/photo/2017/08/07/19/38/red-2607058__340.jpg', 1
 
 
 INSERT INTO "order_has_product" ("order_id", "product_id", "quantity", "price_per_unit")
-VALUES (1, 1, 2, 24.00),
-       (1, 2, 1, 16.15),
-       (1, 3, 3, 15.99),
-       (2, 5, 1, 49.99),
-       (2, 1, 1, 24.00),
-       (3, 12, 1, 36.90),
-       (4, 5, 1, 49.99),
-       (5, 1, 1, 24.00),
-       (6, 12, 1, 36.90);
+VALUES (1, 1, 2, '24.00'),
+       (1, 2, 1, '16.15'),
+       (1, 3, 3, '15.99'),
+       (2, 5, 1, '49.99'),
+       (2, 1, 1, '24.00'),
+       (3, 12, 1, '36.90'),
+       (4, 5, 1, '49.99'),
+       (5, 1, 1, '24.00'),
+       (6, 12, 1, '36.90');
 
 
 

@@ -14,7 +14,7 @@ Customer.init({
   street_number: DataTypes.STRING(4),
   city: DataTypes.TEXT,
   zipcode: DataTypes.STRING(5),
-},{
+}, {
   sequelize,
   tableName: "customer"
 });

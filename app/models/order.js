@@ -5,7 +5,7 @@ class Order extends Model {};
 
 Order.init({
   reference: DataTypes.TEXT,
-  total_amount: DataTypes.FLOAT(5,2),
+  total_amount: DataTypes.TEXT,
   status: DataTypes.TEXT,
 }, {
   sequelize,
