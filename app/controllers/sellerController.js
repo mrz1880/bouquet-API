@@ -105,10 +105,20 @@ const sellerController = {
     try {
       const sellers = await Seller.findAll({
         
-        order: [
-          ['shop_name', 'ASC'],
-        ],
+        raw: true
       });
+
+      //console.log("sellers de BIENNNNNNNNNNN",sellers)
+      const { password, ...sellerData} = sellers; // ainsi sellerData ne contient pas le password et le confirmPassword
+
+    //   sellers.forEach(element => {
+    //     const { password, ...sellerData} = element.dataValues;
+
+    //   });
+
+    //   const newData 
+
+      console.log("SELLERDATA",sellerData[0])
       res.json(sellers);
     } catch (error) {
       console.trace(error);
@@ -119,13 +129,9 @@ const sellerController = {
   getOneSeller: async (req, res) => {
     try {
       const sellerId = req.params.id;
-      const seller = await Seller.findByPk(sellerId, {
-        order: [
-          ['shop_name', 'ASC'],
-        ],
-      });
+      const seller = await Seller.findByPk(sellerId);
       if (seller) {
-        res.json(seller);
+        res.status(200).json(seller);
       } else {
         res.status(404).json('Cant find seller with id ' + sellerId);
       }
