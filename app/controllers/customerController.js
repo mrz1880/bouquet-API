@@ -1,9 +1,12 @@
 const { Customer } = require('../models');
 const bcrypt = require('bcrypt');
 const validator = require('email-validator');
+const jsonwebtoken = require('jsonwebtoken')
+const jwtSecret = process.env.JWT_SECRET;
 
 const customerController = {
     customerHandleLoginForm: async (request, response) => {
+      
         try {
             // on cherche à identifier le customer à partir de son email
             // we are trying to identify a customer from his password
@@ -41,10 +44,29 @@ const customerController = {
                     email
                 },
                 attributes: { exclude: ['password'] } // we don't want the password to be seen in the object we will send
-      
             })
+
+            console.log("updatedCustomer.id :"+updatedCustomer.id)
+            console.log("updatedCustomer : ", updatedCustomer)
             
-            response.status(200).json(updatedCustomer);
+            // ---- JWT
+
+            const jwtContent = { userId: updatedCustomer.id, role: "customer" };
+            const jwtOptions = { 
+              algorithm: 'HS256', 
+              expiresIn: '3h' 
+            };
+            console.log('<< 200', updatedCustomer.email);
+            response.json({ 
+              logged: true, 
+              role: "customer",
+              user: updatedCustomer,
+              token: jsonwebtoken.sign(jwtContent, jwtSecret, jwtOptions),
+            });
+
+            // ---- /JWT
+            
+            //response.status(200).json(updatedCustomer);
             
         } catch (error) {
                     console.log(error);
@@ -125,6 +147,7 @@ const customerController = {
   getOneCustomer: async (req, res) => {
     try {
       const customerId = req.params.id;
+      
       const customer = await Customer.findByPk(customerId, {
         attributes: { exclude: ['password'] } // we don't want the password to be seen in the object we will send    
       });
@@ -144,6 +167,13 @@ const customerController = {
   editCustomerProfile: async (req, res) => {
     try {
         const customerId = req.params.id;
+
+        console.log("req.user", req.user)
+
+        if (customerId != req.user.userId || req.user.role !== 'customer') {
+          return res.status(401).json('You have no right to edit customer :' + customerId);
+        }
+
         const { email, password, passwordConfirm } = req.body;
    
         let customer = await Customer.findByPk(customerId);
@@ -178,9 +208,9 @@ const customerController = {
                 //console.log(element)
                 if (customer[element] && element!= 'password') { // we check that req.body doesn't contain anything unwanted, so it CAN'T contain properties that customer does not have (except passwordConfirm). We don't 
                     customer[element] = req.body[element] // instead of having 14 conditions like ` if (email) { customer.email = email } ` this will do all the work in 2 lines
-                    console.log("OK pour : "+element)
+                    //console.log("OK pour : "+element)
                 } else {
-                    console.log(element+" n'est pas une propriété attendue ici")
+                    //console.log(element+" n'est pas une propriété attendue ici")
                 }
             }
 
