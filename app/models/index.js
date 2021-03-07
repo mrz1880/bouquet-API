@@ -41,7 +41,6 @@ Image.belongsTo(Product, {
     as: "product"
 });
 
-
 // Product <> Order, via la table de liaison
 // "Un Product possède plusieurs Orders"
 Product.belongsToMany(Order, {
