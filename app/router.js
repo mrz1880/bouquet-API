@@ -19,17 +19,9 @@ router.get('/', (req, res) => {
 /** Products */
 router.get('/products', productController.getAllProducts);
 router.get('/product/:id', productController.getOneProduct);
-
-
 router.get('/seller/:id/products', productController.getProductsFromSeller);
+router.post('/seller/:id/products', productController.addNewProduct)
 
-
-
-router.get('/customers', customerController.getAllCustomers);
-router.get('/customer/:id', customerController.getOneCustomer);
-router.patch('/customer/:id', authorization, customerController.editCustomerProfile);
-router.post('/customer/login', customerController.customerHandleLoginForm); // LOGIN
-router.post('/customer/signup', customerController.customerHandleSignupForm); // SIGNUP
 
 
 /* Orders */
@@ -42,6 +34,15 @@ router.get('/customer/:id/orders', orderController.getCustomerOrders); // todo
 
 /* Categories */
 router.get('/categories', categoryController.getAllCategories);
+
+
+
+/* Customers */
+router.get('/customers', customerController.getAllCustomers);
+router.get('/customer/:id', customerController.getOneCustomer);
+router.patch('/customer/:id', authorization, customerController.editCustomerProfile);
+router.post('/customer/login', customerController.customerHandleLoginForm); // LOGIN
+router.post('/customer/signup', customerController.customerHandleSignupForm); // SIGNUP
 
 
 /* Sellers */
