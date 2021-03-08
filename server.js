@@ -14,14 +14,16 @@ const app = express();
 app.use(express.static('public'));
 
 
-//app.use(cors());
+app.use(cors());
+
+//app.options('*', cors())
 
 // cors
 
 app.use((request, response, next) => {
   response.header('Access-Control-Allow-Origin', '*');
   // response.header('Access-Control-Allow-Credentials', true);
-  response.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS, PUT, DELETE');
+  response.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
   response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-Auth-Token, Content-Type, Accept', 'Auhorization');
   next();
 });
