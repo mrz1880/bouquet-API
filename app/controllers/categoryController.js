@@ -5,7 +5,7 @@ const categoryController = {
     try {
       const categories = await Category.findAll({
         order: [
-          ['label', 'ASC'],
+          ['id', 'ASC'],
         ],
       });
       res.json(categories);

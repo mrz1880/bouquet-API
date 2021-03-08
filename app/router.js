@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
 router.get('/products', productController.getAllProducts);
 router.get('/product/:id', productController.getOneProduct);
 router.get('/seller/:id/products', productController.getProductsFromSeller);
-router.post('/seller/:id/products', productController.addNewProduct)
+router.post('/seller/:id/products', authorization, productController.addNewProduct)
 
 
 

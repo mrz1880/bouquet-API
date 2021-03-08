@@ -1,10 +1,13 @@
-const Product = require('../models/product');
+const {Product, Image } = require('../models');
 
 const productController = {
   getAllProducts: async (req, res) => {
     try {
       const products = await Product.findAll({        
-        include : 'category'
+        include : ['category', 'images'],
+        order: [
+          ['id', 'ASC'],
+        ],
       });
       res.json(products);
     } catch (error) {
@@ -17,7 +20,7 @@ const productController = {
      try {
         const productId = req.params.id;
         const product = await Product.findByPk(productId, {        
-            include : 'category'
+          include : ['category', 'images']
           });
          if (product) {
          res.json(product);
@@ -37,7 +40,10 @@ const productController = {
         where : {
           seller_id : sellerId
         },
-        include : 'category'
+        include : ['category', 'images'],
+        order: [
+          ['id', 'ASC'],
+        ],
         }) 
       if (products) {
         res.status(200).json(products)
@@ -48,25 +54,49 @@ const productController = {
     }
   },
 
-  addNewProduct: async (req, res) => {
+  addNewProduct: async (request, response) => {
     try {
-      sellerId = req.params.id;
+      sellerId = request.params.id;
+      
+      if (sellerId != request.user.userId || request.user.role !== 'seller') {
+        return response.status(401).json('You have no right to make this action');
+      }
 
-      if (sellerId != req.user.userId || req.user.role !== 'seller') {
-        return res.status(401).json('You have no right to make this action');
+      const {reference , name , description , stock , price , seller_id , category_id , images} = request.body;
+      
+      // images must be an array
+      if(reference && name && description && stock && price && seller_id && category_id && images) {
+        await Product.create({
+          reference: reference,
+          name: name,
+          description: description,
+          stock: stock,
+          price: price,
+          seller_id: seller_id,
+          category_id: category_id
+        });
+
+        let number;
+        await Product.count().then(num => {
+          number = num
+        })
+
+        
+        for (const image of images) {
+          await Image.create({
+            url: image,
+            product_id: number
+          })         
+        }
+        
+        response.status(200).json('success');
+      } else {
+        response.status(400).json('Données manquantes')
       }
-      const products = await Product.findAll({
-        where : {
-          seller_id : sellerId
-        },
-        include : 'category'
-      }) 
-      if (products) {
-        res.status(200).json(products)
-      }
+      
     } catch (error) {
       console.trace(error);
-      res.status(500).json(error.toString());
+      response.status(500).json(error.toString());
     }
   },
 };

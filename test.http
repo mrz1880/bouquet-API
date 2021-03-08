@@ -99,7 +99,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvb
     "lastname": "Exploratrice",
     "firstname": "Dora la vieille du 06",
     "phone_number": "0661737865",
-    "street_name": "boulevard Sangoku",
+    "street_name": "boulevard Shino",
     "street_number": "13",
     "city": "Paris",
     "zipcode": 75000,
@@ -108,4 +108,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvb
     "shop_name": "Chez David",
     "shop_presentation": "Tu es reconverti dans les roses",
     "shop_me_if_you_can" : "Ok bro"
+}
+
+
+### Ajouter un nouveau produit
+POST http://localhost:3000/seller/1/products
+Content-Type: application/json
+
+{
+  "reference": "02020203",
+  "name": "Verne",
+  "description": "Le bouquet composé par Jules Verne",
+  "stock": "72",
+  "price": "78.00",
+  "seller_id": "1",
+  "category_id": "1",
+  "images": ["https://www.topdecomobilier.com/12546-thickbox_default/bouquet-de-18-fleurs-blanches-h50.jpg"]
 }
