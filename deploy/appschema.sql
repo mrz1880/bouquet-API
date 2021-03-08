@@ -1,15 +1,10 @@
+-- Deploy bouquet-API:appschema to pg
+
+BEGIN;
+-- On démarre une transaction afin de s'assurer de la cohérence gloabale de la BDD
+
 /* Première table : List */
 
--- On démarre une transaction afin de s'assurer de la cohérence gloabale de la BDD
-BEGIN;
-
--- D'abord on supprime les tables 'si elles existent"
-DROP TABLE IF EXISTS "customer", "seller", "product", "order", "image", "category", "order_has_product";
-
-
--- après le DROP, aucune chance que les tables existent
-
--- Ensuite on la (re)crée
 
 -- SERIAL = int auto-incrémenté
 -- PRIMARY KEY implique NOT NULL, pas besoin de l'écrire

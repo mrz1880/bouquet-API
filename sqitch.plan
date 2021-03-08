@@ -1,0 +1,5 @@
+%syntax-version=1.0.0
+%project=bouquet-API
+%uri=https://github.com/Apollon-Mite/bouquet-API
+
+appschema 2021-03-08T11:26:59Z "Etudiant O'clock",,, <etudiant@teleporteur> # Add schema for all bouquet-API objects.

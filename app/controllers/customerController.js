@@ -129,7 +129,7 @@ const customerController = {
     getAllCustomers: async (req, res) => {
     try {
       const customers = await Customer.findAll({ 
-        attributes: { exclude: ['password'] } // we don't want the password to be seen in the object we will send
+        //attributes: { exclude: ['password'] } // we don't want the password to be seen in the object we will send
       });
 
       if (!customers) {

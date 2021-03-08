@@ -31,9 +31,9 @@ Content-Type: application/json
 
 {
     "gender": "F",
-    "email": "abdouladu06@gmail.com",
-    "password": "abdoula",
-    "passwordConfirm" : "abdoula",
+    "email": "morcer@gmail.com",
+    "password": "venise-italie",
+    "passwordConfirm" : "venise-italie",
     "lastname": "Exploratrice",
     "firstname": "Dora",
     "phone_number": "0661737865",
