@@ -9,7 +9,7 @@ Content-Type: application/json
 
 {
     "gender": "F",
-    "email": "abdoula06@gmail.com",
+    "email": "abdoula@gmail.com",
     "password": "abdoula",
     "passwordConfirm" : "abdoula",
     "lastname": "Exploratrice",
@@ -30,17 +30,17 @@ POST http://localhost:3000/customer/signup
 Content-Type: application/json
 
 {
-    "gender": "F",
-    "email": "morcer@gmail.com",
-    "password": "venise-italie",
-    "passwordConfirm" : "venise-italie",
-    "lastname": "Exploratrice",
-    "firstname": "Dora",
-    "phone_number": "0661737865",
-    "street_name": "boulevard Tokyo",
-    "street_number": "13",
-    "city": "Paris",
-    "zipcode": 75000
+  "gender": "F",
+  "email": "abdoula@gmail.com",
+  "password": "abdoula",
+  "passwordConfirm" : "abdoula",
+  "lastname": "Backeux",
+  "firstname": "Maître",
+  "phone_number": "0661737865",
+  "street_name": "boulevard ",
+  "street_number": "13",
+  "city": "Paris",
+  "zipcode": 75000
 }
 
 
@@ -49,7 +49,7 @@ POST http://localhost:3000/seller/login
 Content-Type: application/json
 
 {
-    "email": "abdoula06@gmail.com",
+    "email": "abdoula@gmail.com",
     "password": "abdoula"
 }
 
@@ -59,7 +59,7 @@ POST http://localhost:3000/customer/login
 Content-Type: application/json
 
 {
-    "email": "abdouladu06@gmail.com",
+    "email": "abdoula@gmail.com",
     "password": "abdoula"
 }
 
@@ -112,8 +112,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvb
 
 
 ### Ajouter un nouveau produit
-POST http://localhost:3000/seller/1/products
+POST http://localhost:3000/seller/4/products
 Content-Type: application/json
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGUiOiJzZWxsZXIiLCJpYXQiOjE2MTUyMzM3MTYsImV4cCI6MTYxNTI0NDUxNn0.vjf9_aMkAIG20aJQCtczcNW82kMwSPrLqHLoda4mx3k
 
 {
   "reference": "02020203",
@@ -124,4 +125,13 @@ Content-Type: application/json
   "seller_id": "1",
   "category_id": "1",
   "images": ["https://www.topdecomobilier.com/12546-thickbox_default/bouquet-de-18-fleurs-blanches-h50.jpg"]
+}
+
+
+### editImage
+PATCH http://localhost:3000/image/3
+Content-Type: application/json
+
+{
+  "url": "https://images.unsplash.com/photo-1583400870901-36aee2929bf9?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=633&q=80"
 }

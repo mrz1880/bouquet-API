@@ -1,5 +1,6 @@
 const express = require('express');
 
+// Middleware to verify tokens
 const authorization = require ('./middlewares/auth')
 
 // importer les controllers
@@ -8,6 +9,7 @@ const customerController = require('./controllers/customerController');
 const orderController = require('./controllers/orderController');
 const categoryController = require('./controllers/categoryController');
 const sellerController = require('./controllers/sellerController');
+const imageController = require('./controllers/imageController')
 
 
 const router = express.Router();
@@ -21,14 +23,15 @@ router.get('/products', productController.getAllProducts);
 router.get('/product/:id', productController.getOneProduct);
 router.get('/seller/:id/products', productController.getProductsFromSeller);
 router.post('/seller/:id/products', authorization, productController.addNewProduct)
+// router.patch('/seller/:Sid/product/:Pid', productController.editOneProduct)
 
+router.patch('/image/:id', imageController.editOneImage)
 
 
 /* Orders */
 router.get('/order/:id', orderController.getOneOrder);
-
-router.get('/seller/:id/orders', orderController.getSellerOrders); // todo
-router.get('/customer/:id/orders', orderController.getCustomerOrders); // todo
+router.get('/seller/:id/orders', orderController.getSellerOrders);
+router.get('/customer/:id/orders', orderController.getCustomerOrders);
 
 
 

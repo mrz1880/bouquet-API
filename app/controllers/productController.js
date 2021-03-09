@@ -99,6 +99,34 @@ const productController = {
       response.status(500).json(error.toString());
     }
   },
+
+  // editOneProduct : async (request, response) => {
+  //   try {
+  //     const sellerId = request.params.Sid;
+  //     const productId = request.params.Pid;
+
+  //     // const product = await Product.findOne({
+  //     //   where : {
+  //     //     id: productID
+  //     //   }
+  //     // })
+
+  //     // { url, product_id}
+      
+  //     // if (firstname) {
+  //     //     product.url = url;
+  //     // }
+  //     // if (lastname) {
+  //     //     customer.lastname = lastname;
+  //     // }
+  //     //await customer.save();
+
+
+
+  //   } catch (error) {
+  //     console.log('Erreur')
+  //   }
+  // }
 };
 
 module.exports = productController;
