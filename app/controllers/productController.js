@@ -1,14 +1,15 @@
-const {Product, Image } = require('../models');
+const {Product, Image, Seller } = require('../models');
 
 const productController = {
   getAllProducts: async (req, res) => {
     try {
       const products = await Product.findAll({        
-        include : ['category', 'images'],
-        order: [
-          ['id', 'ASC'],
-        ],
-      });
+        include : ['category', 'images', {
+          model: Seller,
+          as: 'seller',
+          attributes: { exclude: ['password'] }
+        }]
+        });
       res.json(products);
     } catch (error) {
       console.trace(error);
@@ -20,7 +21,11 @@ const productController = {
      try {
         const productId = req.params.id;
         const product = await Product.findByPk(productId, {        
-          include : ['category', 'images']
+          include : ['category', 'images', {
+            model: Seller,
+            as: 'seller',
+            attributes: { exclude: ['password'] }
+          }]
           });
          if (product) {
          res.json(product);
@@ -40,7 +45,11 @@ const productController = {
         where : {
           seller_id : sellerId
         },
-        include : ['category', 'images'],
+        include : ['category', 'images', {
+          model: Seller,
+          as: 'seller',
+          attributes: { exclude: ['password'] }
+        }],
         order: [
           ['id', 'ASC'],
         ],
