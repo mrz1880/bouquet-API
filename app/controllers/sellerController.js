@@ -75,10 +75,15 @@ const sellerController = {
    sellerHandleSignupForm: async (request, response) => {
     try {
 
+      const {gender, email, password, passwordConfirm, lastname, firstname, phone_number, street_name, street_number, city, zipcode, picture_url, siret, shop_name, shop_presentation} = request.body;
+
+      if (!gender || !email || !password || !passwordConfirm || !lastname || !firstname || !phone_number || !street_name || !street_number || !city || !zipcode || !picture_url || !siret || !shop_name || !shop_presentation) {
+        return response.status(403).json('Vous n\'avez pas rempli tous les champs');  
+      }
         //on checke si un utilisateur existe déjà avec cet email
         const seller = await Seller.findOne({
             where: {
-                email: request.body.email
+                email: email
             }
         });
 
@@ -88,36 +93,36 @@ const sellerController = {
             return response.status(403).json('Un compte existe déjà avec cet email, veuillez réessayer avec un autre email');
         }
         //on checke que l'email a un format valide
-        if (!validator.validate(request.body.email)) {
+        if (!validator.validate(email)) {
             // the email given has not valid format 
             return response.status(403).json('Le format de l\'email est incorrect'); 
         }
         // let's check that password and password-confirmation are the same
-        if (request.body.password !== request.body.passwordConfirm) {
+        if (password !== passwordConfirm) {
             // they are not the same;
             return response.status(403).json('La confirmation du mot de passe a échoué');
         }
         // we hash password
-        const hashedPwd = bcrypt.hashSync(request.body.password, 10)
+        const hashedPwd = bcrypt.hashSync(password, 10)
         
 
         // we add the new seller in database
         
         await Seller.create({
-            gender: request.body.gender,
-            email: request.body.email,
+            gender,
+            email,
             password: hashedPwd,
-            lastname: request.body.lastname,
-            firstname: request.body.firstname,
-            phone_number: request.body.phone_number,
-            street_name: request.body.street_name,
-            street_number: request.body.street_number,
-            city: request.body.city,
-            zipcode: request.body.zipcode,
-            picture_url: request.body.picture_url,
-            siret: request.body.siret,
-            shop_name: request.body.shop_name,
-            shop_presentation: request.body.shop_presentation
+            lastname,
+            firstname,
+            phone_number,
+            street_name,
+            street_number,
+            city,
+            zipcode,
+            picture_url,
+            siret,
+            shop_name,
+            shop_presentation
         });
         
         response.status(200).json('success');

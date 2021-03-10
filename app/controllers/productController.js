@@ -3,7 +3,8 @@ const {Product, Image, Seller } = require('../models');
 const productController = {
   getAllProducts: async (req, res) => {
     try {
-      const products = await Product.findAll({        
+      const products = await Product.findAll({ 
+        order: [['id', 'ASC']],       
         include : ['category', 'images', {
           model: Seller,
           as: 'seller',

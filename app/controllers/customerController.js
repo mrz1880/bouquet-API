@@ -78,46 +78,54 @@ const customerController = {
    customerHandleSignupForm: async (request, response) => {
     try {
 
-        //on checke si un utilisateur existe déjà avec cet email
-        const customer = await Customer.findOne({
-            where: {
-                email: request.body.email
-            }
-        });
+     const {gender, email, password, passwordConfirm, lastname, firstname, phone_number, street_name, street_number, city, zipcode} = request.body;
 
-        if (customer) {
-            //il y a déjà un utilisateur avec cet email, on envoie une erreur
-            // there is already a customer with this email  
-            return response.status(403).json('Un compte existe déjà avec cet email, veuillez réessayer avec un autre email');
-        }
-        //on checke que l'email a un format valide
-        if (!validator.validate(request.body.email)) {
-            // the email given has not valid format 
-            return response.status(403).json('Le format de l\'email est incorrect'); 
-        }
-        // let's check that password and password-confirmation are the same
-        if (request.body.password !== request.body.passwordConfirm) {
-            // they are not the same;
-            return response.status(403).json('La confirmation du mot de passe a échoué');
-        }
-        // we hash password
-        const hashedPwd = bcrypt.hashSync(request.body.password, 10)
-        
+      if (!gender || !email || !password || !passwordConfirm || !lastname || !firstname || !phone_number || !street_name || !street_number || !city || !zipcode) {
+        return response.status(403).json('Vous n\'avez pas rempli tous les champs');  
+      }
 
-        // we add the new customer in database
-        
-        await Customer.create({
-            gender: request.body.gender,
-            email: request.body.email,
-            password: hashedPwd,
-            lastname: request.body.lastname,
-            firstname: request.body.firstname,
-            phone_number: request.body.phone_number,
-            street_name: request.body.street_name,
-            street_number: request.body.street_number,
-            city: request.body.city,
-            zipcode: request.body.zipcode
-        });
+      //on checke que l'email a un format valide
+      if (!validator.validate(email)) {
+        // the email given has not valid format 
+        return response.status(403).json('Le format de l\'email est incorrect'); 
+    }
+
+      //on checke si un utilisateur existe déjà avec cet email
+      const customer = await Customer.findOne({
+          where: {
+              email: email
+          }
+      });
+
+      if (customer) {
+          //il y a déjà un utilisateur avec cet email, on envoie une erreur
+          // there is already a customer with this email  
+          return response.status(403).json('Un compte existe déjà avec cet email, veuillez réessayer avec un autre email');
+      }
+      
+      // let's check that password and password-confirmation are the same
+      if (password !== passwordConfirm) {
+          // they are not the same;
+          return response.status(403).json('La confirmation du mot de passe a échoué');
+      }
+      // we hash password
+      const hashedPwd = bcrypt.hashSync(password, 10)
+      
+
+      // we add the new customer in database
+      
+      await Customer.create({
+          gender,
+          email,
+          password: hashedPwd,
+          lastname,
+          firstname,
+          phone_number,
+          street_name,
+          street_number,
+          city,
+          zipcode
+      });
         
         response.status(200).json('success');
     } catch(error) {
