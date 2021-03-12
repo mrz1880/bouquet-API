@@ -1,9 +1,9 @@
 const { Image } = require('../models');
 
 const imageController = {
-  editOneImage: async (request, response) => {
+  editOneImage: async (req, res) => {
     try {
-      const imageId = request.params.id;
+      const imageId = req.params.id;
 
       const image = await Image.findOne({
         where: {
@@ -14,7 +14,7 @@ const imageController = {
         return console.log("Pas d'image avec id :", imageId);
       }
 
-      const { url, product_id } = request.body;
+      const { url, product_id } = req.body;
 
       if (url) {
         image.url = url;
@@ -25,7 +25,7 @@ const imageController = {
 
       await image.save();
 
-      response.status(200).json('Success');
+      res.status(200).json('Success');
     } catch (error) {
       console.log('Erreur');
     }

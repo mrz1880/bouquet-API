@@ -74,14 +74,12 @@ const productController = {
     }
   },
 
-  addNewProduct: async (request, response) => {
+  addNewProduct: async (req, res) => {
     try {
-      sellerId = request.params.id;
+      sellerId = req.params.id;
 
-      if (sellerId != request.user.userId || request.user.role !== 'seller') {
-        return response
-          .status(401)
-          .json('You have no right to make this action');
+      if (sellerId != req.user.userId || req.user.role !== 'seller') {
+        return res.status(401).json('You have no right to make this action');
       }
 
       const {
@@ -93,7 +91,7 @@ const productController = {
         seller_id,
         category_id,
         images,
-      } = request.body;
+      } = req.body;
 
       // images must be an array
       if (
@@ -128,13 +126,13 @@ const productController = {
           });
         }
 
-        response.status(200).json('success');
+        res.status(200).json('success');
       } else {
-        response.status(400).json('Données manquantes');
+        res.status(400).json('Données manquantes');
       }
     } catch (error) {
       console.trace(error);
-      response.status(500).json(error.toString());
+      res.status(500).json(error.toString());
     }
   },
 

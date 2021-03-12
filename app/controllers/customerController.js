@@ -6,15 +6,15 @@ const { Customer } = require('../models');
 const jwtSecret = process.env.JWT_SECRET;
 
 const customerController = {
-  customerHandleLoginForm: async (request, response) => {
+  customerHandleLoginForm: async (req, res) => {
     try {
       // on cherche à identifier le customer à partir de son email
       // we are trying to identify a customer from his password
-      const { email } = request.body;
+      const { email } = req.body;
 
       if (!validator.validate(email)) {
         // the email given has not valid format
-        return response.status(403).json("Le format de l'email est incorrect");
+        return res.status(403).json("Le format de l'email est incorrect");
       }
 
       const customer = await Customer.findOne({
@@ -25,20 +25,20 @@ const customerController = {
 
       // if no customer found with this email => error
       if (!customer) {
-        return response.status(403).json('Email ou mot de passe incorrect');
+        return res.status(403).json('Email ou mot de passe incorrect');
       }
 
       // the customer with this email exists, let's compare received password with the hashed one in database
 
       // bcrypt can check if 2 passwords are the same, the password entered by user and the one in database
       const validPwd = await bcrypt.compare(
-        request.body.password,
+        req.body.password,
         customer.dataValues.password
       );
 
       if (!validPwd) {
         // password is not correct, we send an error
-        return response.status(403).json('Email ou mot de passe incorrect');
+        return res.status(403).json('Email ou mot de passe incorrect');
       }
 
       // this customer exists and identified himself, we send him his data (witout password)
@@ -56,7 +56,7 @@ const customerController = {
         algorithm: 'HS256',
         expiresIn: '3h',
       };
-      response.json({
+      res.json({
         logged: true,
         role: 'customer',
         user: updatedCustomer,
@@ -71,7 +71,7 @@ const customerController = {
     }
   },
 
-  customerHandleSignupForm: async (request, response) => {
+  customerHandleSignupForm: async (req, res) => {
     try {
       const {
         gender,
@@ -85,7 +85,7 @@ const customerController = {
         street_number,
         city,
         zipcode,
-      } = request.body;
+      } = req.body;
 
       if (
         !gender ||
@@ -100,15 +100,13 @@ const customerController = {
         !city ||
         !zipcode
       ) {
-        return response
-          .status(403)
-          .json("Vous n'avez pas rempli tous les champs");
+        return res.status(403).json("Vous n'avez pas rempli tous les champs");
       }
 
       // on checke que l'email a un format valide
       if (!validator.validate(email)) {
         // the email given has not valid format
-        return response.status(403).json("Le format de l'email est incorrect");
+        return res.status(403).json("Le format de l'email est incorrect");
       }
 
       // on checke si un utilisateur existe déjà avec cet email
@@ -121,7 +119,7 @@ const customerController = {
       if (customer) {
         // il y a déjà un utilisateur avec cet email, on envoie une erreur
         // there is already a customer with this email
-        return response
+        return res
           .status(403)
           .json(
             'Un compte existe déjà avec cet email, veuillez réessayer avec un autre email'
@@ -131,9 +129,7 @@ const customerController = {
       // let's check that password and password-confirmation are the same
       if (password !== passwordConfirm) {
         // they are not the same;
-        return response
-          .status(403)
-          .json('La confirmation du mot de passe a échoué');
+        return res.status(403).json('La confirmation du mot de passe a échoué');
       }
       // we hash password
       const hashedPwd = await bcrypt.hash(password, 10);
@@ -153,7 +149,7 @@ const customerController = {
         zipcode,
       });
 
-      response.status(200).json('success');
+      res.status(200).json('success');
     } catch (error) {
       console.log(error);
     }

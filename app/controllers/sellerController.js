@@ -7,15 +7,15 @@ const jwtSecret = process.env.JWT_SECRET;
 // const { Op } = require('sequelize');
 
 const sellerController = {
-  sellerHandleLoginForm: async (request, response) => {
+  sellerHandleLoginForm: async (req, res) => {
     try {
       // on cherche à identifier le seller à partir de son email
       // we are trying to identify a seller from his password
-      const { email } = request.body;
+      const { email } = req.body;
 
       if (!validator.validate(email)) {
         // the email given has not valid format
-        return response.status(403).json("Le format de l'email est incorrect");
+        return res.status(403).json("Le format de l'email est incorrect");
       }
 
       const seller = await Seller.findOne({
@@ -26,20 +26,20 @@ const sellerController = {
 
       // if no seller found with this email => error
       if (!seller) {
-        return response.status(403).json('Email ou mot de passe incorrect');
+        return res.status(403).json('Email ou mot de passe incorrect');
       }
 
       // the seller with this email exists, let's compare received password with the hashed one in database
 
       // bcrypt can check if 2 passwords are the same, the password entered by user and the one in database
       const validPwd = await bcrypt.compare(
-        request.body.password,
+        req.body.password,
         seller.dataValues.password
       );
 
       if (!validPwd) {
         // password is not correct, we send an error
-        return response.status(403).json('Email ou mot de passe incorrect');
+        return res.status(403).json('Email ou mot de passe incorrect');
       }
 
       // const { password, ...sellerData} = seller.dataValues; // like this, we remove password from object that we'll send because it is sensitive data
@@ -57,7 +57,7 @@ const sellerController = {
         algorithm: 'HS256',
         expiresIn: '3h',
       };
-      response.json({
+      res.json({
         logged: true,
         role: 'seller',
         user: updatedSeller,
@@ -70,7 +70,7 @@ const sellerController = {
     }
   },
 
-  sellerHandleSignupForm: async (request, response) => {
+  sellerHandleSignupForm: async (req, res) => {
     try {
       const {
         gender,
@@ -88,7 +88,7 @@ const sellerController = {
         siret,
         shop_name,
         shop_presentation,
-      } = request.body;
+      } = req.body;
 
       if (
         !gender ||
@@ -107,9 +107,7 @@ const sellerController = {
         !shop_name ||
         !shop_presentation
       ) {
-        return response
-          .status(403)
-          .json("Vous n'avez pas rempli tous les champs");
+        return res.status(403).json("Vous n'avez pas rempli tous les champs");
       }
       // on checke si un utilisateur existe déjà avec cet email
       const seller = await Seller.findOne({
@@ -121,7 +119,7 @@ const sellerController = {
       if (seller) {
         // il y a déjà un utilisateur avec cet email, on envoie une erreur
         // there is already a seller with this email
-        return response
+        return res
           .status(403)
           .json(
             'Un compte existe déjà avec cet email, veuillez réessayer avec un autre email'
@@ -130,14 +128,12 @@ const sellerController = {
       // on checke que l'email a un format valide
       if (!validator.validate(email)) {
         // the email given has not valid format
-        return response.status(403).json("Le format de l'email est incorrect");
+        return res.status(403).json("Le format de l'email est incorrect");
       }
       // let's check that password and password-confirmation are the same
       if (password !== passwordConfirm) {
         // they are not the same;
-        return response
-          .status(403)
-          .json('La confirmation du mot de passe a échoué');
+        return res.status(403).json('La confirmation du mot de passe a échoué');
       }
       // we hash password
       const hashedPwd = await bcrypt.hash(password, 10);
@@ -161,7 +157,7 @@ const sellerController = {
         shop_presentation,
       });
 
-      response.status(200).json('success');
+      res.status(200).json('success');
     } catch (error) {
       res.status(500).json(error.toString());
     }
