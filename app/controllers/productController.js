@@ -49,7 +49,7 @@ const productController = {
 
   getProductsFromSeller: async (req, res) => {
     try {
-      sellerId = req.params.id;
+      const sellerId = req.params.id;
       const products = await Product.findAll({
         where: {
           seller_id: sellerId,
@@ -76,9 +76,9 @@ const productController = {
 
   addNewProduct: async (req, res) => {
     try {
-      sellerId = req.params.id;
+      const sellerId = req.params.id;
 
-      if (sellerId != req.user.userId || req.user.role !== 'seller') {
+      if (sellerId !== req.user.userId || req.user.role !== 'seller') {
         return res.status(401).json('You have no right to make this action');
       }
 
