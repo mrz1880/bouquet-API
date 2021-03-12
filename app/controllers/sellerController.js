@@ -202,7 +202,7 @@ const sellerController = {
     try {
       const sellerId = req.params.id;
 
-      if (sellerId != req.user.userId || req.user.role !== 'seller') {
+      if (sellerId !== req.user.userId || req.user.role !== 'seller') {
         return res
           .status(401)
           .json(`You have no right to edit seller :${sellerId}`);
@@ -241,7 +241,7 @@ const sellerController = {
         // on ne change que les paramètres envoyés
         // we patch with received data only
         for (const element in req.body) {
-          if (seller[element] && element != 'password') {
+          if (seller[element] && element !== 'password') {
             // we check that req.body doesn't contain anything unwanted, so it CAN'T contain properties that seller does not have (except passwordConfirm). We don't
             seller[element] = req.body[element]; // instead of having 14 conditions like ` if (email) { seller.email = email } ` this will do all the work in 2 lines
           } else {
