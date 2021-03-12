@@ -127,7 +127,7 @@ const sellerController = {
         
         response.status(200).json('success');
     } catch(error) {
-        console.log(error);
+      res.status(500).json(error.toString())
     }
 },
 
