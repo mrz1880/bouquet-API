@@ -235,7 +235,7 @@ const customerController = {
         // we patch with received data only
         for (const element in req.body) {
           // console.log(element)
-          if (customer[element] && element != 'password') {
+          if (customer[element] && element !== 'password') {
             // we check that req.body doesn't contain anything unwanted, so it CAN'T contain properties that customer does not have (except passwordConfirm). We don't
             customer[element] = req.body[element]; // instead of having 14 conditions like ` if (email) { customer.email = email } ` this will do all the work in 2 lines
             // console.log("OK pour : "+element)
@@ -245,7 +245,7 @@ const customerController = {
         }
 
         if (password) {
-          if (password != passwordConfirm) {
+          if (password !== passwordConfirm) {
             return res
               .status(403)
               .json('La confirmation du mot de passe a échoué');
