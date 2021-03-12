@@ -1,5 +1,5 @@
 {
-  "name": "bouquet-API",
+  "name": "bouquet-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -24,9 +24,10 @@
   "devDependencies": {
     "@babel/core": "^7.13.10",
     "@babel/eslint-parser": "^7.13.10",
+    "babel-eslint": "^10.1.0",
     "eslint": "^7.21.0",
     "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-prettier": "^6.15.0",
     "eslint-config-wesbos": "^1.0.1",
     "eslint-plugin-html": "^6.1.2",
     "eslint-plugin-import": "^2.22.1",
