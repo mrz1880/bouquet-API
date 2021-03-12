@@ -31,7 +31,7 @@ const customerController = {
       // the customer with this email exists, let's compare received password with the hashed one in database
 
       // bcrypt can check if 2 passwords are the same, the password entered by user and the one in database
-      const validPwd = bcrypt.compareSync(
+      const validPwd = await bcrypt.compare(
         request.body.password,
         customer.dataValues.password
       );
@@ -136,7 +136,7 @@ const customerController = {
           .json('La confirmation du mot de passe a échoué');
       }
       // we hash password
-      const hashedPwd = bcrypt.hashSync(password, 10);
+      const hashedPwd = await bcrypt.hash(password, 10);
 
       // we add the new customer in database
 
@@ -199,7 +199,7 @@ const customerController = {
     try {
       const customerId = req.params.id;
 
-      if (customerId != req.user.userId || req.user.role !== 'customer') {
+      if (customerId !== req.user.userId || req.user.role !== 'customer') {
         return res
           .status(401)
           .json(`You have no right to edit customer :${customerId}`);
@@ -255,7 +255,7 @@ const customerController = {
               .json('La confirmation du mot de passe a échoué');
           }
 
-          const hashedPwd = bcrypt.hashSync(req.body.password, 10);
+          const hashedPwd = await bcrypt.hash(req.body.password, 10);
           customer.password = hashedPwd;
         }
 

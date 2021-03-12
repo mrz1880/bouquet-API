@@ -32,7 +32,7 @@ const sellerController = {
       // the seller with this email exists, let's compare received password with the hashed one in database
 
       // bcrypt can check if 2 passwords are the same, the password entered by user and the one in database
-      const validPwd = bcrypt.compareSync(
+      const validPwd = await bcrypt.compare(
         request.body.password,
         seller.dataValues.password
       );
@@ -140,7 +140,7 @@ const sellerController = {
           .json('La confirmation du mot de passe a échoué');
       }
       // we hash password
-      const hashedPwd = bcrypt.hashSync(password, 10);
+      const hashedPwd = await bcrypt.hash(password, 10);
 
       // we add the new seller in database
 
@@ -253,13 +253,13 @@ const sellerController = {
         }
 
         if (password) {
-          if (password != passwordConfirm) {
+          if (password !== passwordConfirm) {
             return res
               .status(403)
               .json('La confirmation du mot de passe a échoué');
           }
 
-          const hashedPwd = bcrypt.hashSync(req.body.password, 10);
+          const hashedPwd = await bcrypt.hash(req.body.password, 10);
           seller.password = hashedPwd;
         }
 
